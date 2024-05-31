@@ -1,15 +1,13 @@
 syntax = "proto3";
 
 service ChatService {
-    rpc RegisterUser (RegisterRequest) returns (RegisterResponse);
+    rpc RegisterConnection(RegisterRequest) returns (RegisterResponse);
     rpc SendMessage (SendMessageRequest) returns (SendMessageResponse);
-    rpc ReceiveMessage (ReceiveMessageRequest) returns (ReceiveMessageResponse);
 }
 
 message RegisterRequest {
-    string username = 1;
-    string ip = 2;
-    int32 port = 3;
+    string sender = 1;
+    string address = 2;
 }
 
 message RegisterResponse {
@@ -23,14 +21,5 @@ message SendMessageRequest {
 }
 
 message SendMessageResponse {
-    string status = 1;
-}
-
-message ReceiveMessageRequest {
-    string sender = 1;
-    string message = 2;
-}
-
-message ReceiveMessageResponse {
     string status = 1;
 }

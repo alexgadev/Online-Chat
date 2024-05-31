@@ -1,10 +1,11 @@
 server:
-  ip:
-  port:
+  ip: 'localhost'
+  port: 32770
 
 clients:
-  - ip:
-    port:
-  - ip:
-    port:
-...
+  - ip: 'localhost'
+    port: 32771
+  - ip: 'localhost'
+    port: 32772
+  - ip: 'localhost'
+    port: 32773
