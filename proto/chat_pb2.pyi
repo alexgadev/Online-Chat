@@ -5,14 +5,12 @@ from typing import ClassVar as _ClassVar, Optional as _Optional
 DESCRIPTOR: _descriptor.FileDescriptor
 
 class RegisterRequest(_message.Message):
-    __slots__ = ("username", "ip", "port")
-    USERNAME_FIELD_NUMBER: _ClassVar[int]
-    IP_FIELD_NUMBER: _ClassVar[int]
-    PORT_FIELD_NUMBER: _ClassVar[int]
-    username: str
-    ip: str
-    port: int
-    def __init__(self, username: _Optional[str] = ..., ip: _Optional[str] = ..., port: _Optional[int] = ...) -> None: ...
+    __slots__ = ("sender", "address")
+    SENDER_FIELD_NUMBER: _ClassVar[int]
+    ADDRESS_FIELD_NUMBER: _ClassVar[int]
+    sender: str
+    address: str
+    def __init__(self, sender: _Optional[str] = ..., address: _Optional[str] = ...) -> None: ...
 
 class RegisterResponse(_message.Message):
     __slots__ = ("status",)
@@ -31,20 +29,6 @@ class SendMessageRequest(_message.Message):
     def __init__(self, sender: _Optional[str] = ..., receiver: _Optional[str] = ..., message: _Optional[str] = ...) -> None: ...
 
 class SendMessageResponse(_message.Message):
-    __slots__ = ("status",)
-    STATUS_FIELD_NUMBER: _ClassVar[int]
-    status: str
-    def __init__(self, status: _Optional[str] = ...) -> None: ...
-
-class ReceiveMessageRequest(_message.Message):
-    __slots__ = ("sender", "message")
-    SENDER_FIELD_NUMBER: _ClassVar[int]
-    MESSAGE_FIELD_NUMBER: _ClassVar[int]
-    sender: str
-    message: str
-    def __init__(self, sender: _Optional[str] = ..., message: _Optional[str] = ...) -> None: ...
-
-class ReceiveMessageResponse(_message.Message):
     __slots__ = ("status",)
     STATUS_FIELD_NUMBER: _ClassVar[int]
     status: str

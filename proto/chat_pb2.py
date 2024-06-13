@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nchat.proto\"=\n\x0fRegisterRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\n\n\x02ip\x18\x02 \x01(\t\x12\x0c\n\x04port\x18\x03 \x01(\x05\"\"\n\x10RegisterResponse\x12\x0e\n\x06status\x18\x01 \x01(\t\"G\n\x12SendMessageRequest\x12\x0e\n\x06sender\x18\x01 \x01(\t\x12\x10\n\x08receiver\x18\x02 \x01(\t\x12\x0f\n\x07message\x18\x03 \x01(\t\"%\n\x13SendMessageResponse\x12\x0e\n\x06status\x18\x01 \x01(\t\"8\n\x15ReceiveMessageRequest\x12\x0e\n\x06sender\x18\x01 \x01(\t\x12\x0f\n\x07message\x18\x02 \x01(\t\"(\n\x16ReceiveMessageResponse\x12\x0e\n\x06status\x18\x01 \x01(\t2\xbf\x01\n\x0b\x43hatService\x12\x33\n\x0cRegisterUser\x12\x10.RegisterRequest\x1a\x11.RegisterResponse\x12\x38\n\x0bSendMessage\x12\x13.SendMessageRequest\x1a\x14.SendMessageResponse\x12\x41\n\x0eReceiveMessage\x12\x16.ReceiveMessageRequest\x1a\x17.ReceiveMessageResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nchat.proto\"2\n\x0fRegisterRequest\x12\x0e\n\x06sender\x18\x01 \x01(\t\x12\x0f\n\x07\x61\x64\x64ress\x18\x02 \x01(\t\"\"\n\x10RegisterResponse\x12\x0e\n\x06status\x18\x01 \x01(\t\"G\n\x12SendMessageRequest\x12\x0e\n\x06sender\x18\x01 \x01(\t\x12\x10\n\x08receiver\x18\x02 \x01(\t\x12\x0f\n\x07message\x18\x03 \x01(\t\"%\n\x13SendMessageResponse\x12\x0e\n\x06status\x18\x01 \x01(\t2\x82\x01\n\x0b\x43hatService\x12\x39\n\x12RegisterConnection\x12\x10.RegisterRequest\x1a\x11.RegisterResponse\x12\x38\n\x0bSendMessage\x12\x13.SendMessageRequest\x1a\x14.SendMessageResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -22,17 +22,13 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'chat_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
   _globals['_REGISTERREQUEST']._serialized_start=14
-  _globals['_REGISTERREQUEST']._serialized_end=75
-  _globals['_REGISTERRESPONSE']._serialized_start=77
-  _globals['_REGISTERRESPONSE']._serialized_end=111
-  _globals['_SENDMESSAGEREQUEST']._serialized_start=113
-  _globals['_SENDMESSAGEREQUEST']._serialized_end=184
-  _globals['_SENDMESSAGERESPONSE']._serialized_start=186
-  _globals['_SENDMESSAGERESPONSE']._serialized_end=223
-  _globals['_RECEIVEMESSAGEREQUEST']._serialized_start=225
-  _globals['_RECEIVEMESSAGEREQUEST']._serialized_end=281
-  _globals['_RECEIVEMESSAGERESPONSE']._serialized_start=283
-  _globals['_RECEIVEMESSAGERESPONSE']._serialized_end=323
-  _globals['_CHATSERVICE']._serialized_start=326
-  _globals['_CHATSERVICE']._serialized_end=517
+  _globals['_REGISTERREQUEST']._serialized_end=64
+  _globals['_REGISTERRESPONSE']._serialized_start=66
+  _globals['_REGISTERRESPONSE']._serialized_end=100
+  _globals['_SENDMESSAGEREQUEST']._serialized_start=102
+  _globals['_SENDMESSAGEREQUEST']._serialized_end=173
+  _globals['_SENDMESSAGERESPONSE']._serialized_start=175
+  _globals['_SENDMESSAGERESPONSE']._serialized_end=212
+  _globals['_CHATSERVICE']._serialized_start=215
+  _globals['_CHATSERVICE']._serialized_end=345
 # @@protoc_insertion_point(module_scope)
