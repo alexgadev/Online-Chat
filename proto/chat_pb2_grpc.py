@@ -3,7 +3,7 @@
 import grpc
 import warnings
 
-import chat_pb2 as chat__pb2
+from proto import chat_pb2 as proto_dot_chat__pb2
 
 GRPC_GENERATED_VERSION = '1.64.1'
 GRPC_VERSION = grpc.__version__
@@ -20,7 +20,7 @@ except ImportError:
 if _version_not_supported:
     warnings.warn(
         f'The grpc package installed is at version {GRPC_VERSION},'
-        + f' but the generated code in chat_pb2_grpc.py depends on'
+        + f' but the generated code in proto/chat_pb2_grpc.py depends on'
         + f' grpcio>={GRPC_GENERATED_VERSION}.'
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
@@ -41,13 +41,13 @@ class ChatServiceStub(object):
         """
         self.RegisterConnection = channel.unary_unary(
                 '/ChatService/RegisterConnection',
-                request_serializer=chat__pb2.RegisterRequest.SerializeToString,
-                response_deserializer=chat__pb2.RegisterResponse.FromString,
+                request_serializer=proto_dot_chat__pb2.RegisterRequest.SerializeToString,
+                response_deserializer=proto_dot_chat__pb2.RegisterResponse.FromString,
                 _registered_method=True)
         self.SendMessage = channel.unary_unary(
                 '/ChatService/SendMessage',
-                request_serializer=chat__pb2.SendMessageRequest.SerializeToString,
-                response_deserializer=chat__pb2.SendMessageResponse.FromString,
+                request_serializer=proto_dot_chat__pb2.SendMessageRequest.SerializeToString,
+                response_deserializer=proto_dot_chat__pb2.SendMessageResponse.FromString,
                 _registered_method=True)
 
 
@@ -71,13 +71,13 @@ def add_ChatServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'RegisterConnection': grpc.unary_unary_rpc_method_handler(
                     servicer.RegisterConnection,
-                    request_deserializer=chat__pb2.RegisterRequest.FromString,
-                    response_serializer=chat__pb2.RegisterResponse.SerializeToString,
+                    request_deserializer=proto_dot_chat__pb2.RegisterRequest.FromString,
+                    response_serializer=proto_dot_chat__pb2.RegisterResponse.SerializeToString,
             ),
             'SendMessage': grpc.unary_unary_rpc_method_handler(
                     servicer.SendMessage,
-                    request_deserializer=chat__pb2.SendMessageRequest.FromString,
-                    response_serializer=chat__pb2.SendMessageResponse.SerializeToString,
+                    request_deserializer=proto_dot_chat__pb2.SendMessageRequest.FromString,
+                    response_serializer=proto_dot_chat__pb2.SendMessageResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -105,8 +105,8 @@ class ChatService(object):
             request,
             target,
             '/ChatService/RegisterConnection',
-            chat__pb2.RegisterRequest.SerializeToString,
-            chat__pb2.RegisterResponse.FromString,
+            proto_dot_chat__pb2.RegisterRequest.SerializeToString,
+            proto_dot_chat__pb2.RegisterResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -132,8 +132,8 @@ class ChatService(object):
             request,
             target,
             '/ChatService/SendMessage',
-            chat__pb2.SendMessageRequest.SerializeToString,
-            chat__pb2.SendMessageResponse.FromString,
+            proto_dot_chat__pb2.SendMessageRequest.SerializeToString,
+            proto_dot_chat__pb2.SendMessageResponse.FromString,
             options,
             channel_credentials,
             insecure,

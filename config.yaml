@@ -2,6 +2,19 @@ server:
   ip: 'localhost'
   port: 32770
 
+name_server:
+  image: 'redis:latest'
+  name: 'redis'
+  ip: 'localhost'
+  port: 6379
+
+broker:
+  image: 'rabbitmq:3.13-management' 
+  name: 'rabbitmq'
+  ip: 'localhost'
+  port: 5672
+  http: 15672
+
 clients:
   - ip: 'localhost'
     port: 32771
