@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # Start a chat client
-python client.py
+python3 client.py

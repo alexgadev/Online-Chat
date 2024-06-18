@@ -11,16 +11,20 @@ from proto import chat_pb2_grpc, chat_pb2
 
 
 class ChatServicer(chat_pb2_grpc.ChatServiceServicer):
-    def __init__(self, username):
+    def __init__(self, username, address):
         self.username = username # for several private chats opened at once
+        self.address = address
+        print(self.username, self.address)
 
     def RegisterConnection(self, request, context):
-        connect_chat(sender=username, receiver=f"{request.sender}:{request.address}")
+        connect_chat(sender=self.username, receiver=request.address)
         return chat_pb2.RegisterResponse(status="success")
 
     def SendMessage(self, request, context):
         #TODO: tratar la ip/puerto
         #TODO: printear en terminal del chat privado
+        if request.message == "exit":
+            return chat_pb2.SendMessageResponse(status="failed")    
         print(f"[{request.sender}] {request.message}")
         return chat_pb2.SendMessageResponse(status="success")
     
@@ -39,8 +43,10 @@ class ChatServicer(chat_pb2_grpc.ChatServiceServicer):
         # create dedicated UI for the chat
         # send and wait for messages through RabbitMQ pubsub
     # -- IMPORTANT -- UI must provide means to leave a chat room
-def connect_chat(self, sender, receiver):
+def connect_chat(sender, receiver=None):
     if not receiver:
+        username, ip, port = sender.split(":")
+
         chat_id = input("Write the chat id: ")
 
         # access redis and retrieve connection parameters
@@ -48,10 +54,10 @@ def connect_chat(self, sender, receiver):
 
         if not chat_params:
             print("Chat doesn't exit or there was a typing error.")
-        else:
-            ip, port = chat_params.split(":")
+            return
     else:
-        username, ip, port = receiver.split(":")
+        username = sender
+        chat_params = receiver
 
     # open gRPC channel to the receiver's server
     channel = grpc.insecure_channel(chat_params)
@@ -61,18 +67,17 @@ def connect_chat(self, sender, receiver):
 
     if not receiver:
         # communicate username, ip and port to receiver through RegisterConnection
-        request = chat_pb2.RegisterRequest(sender=sender.username, address=f"{self.ip}:{self.port}")
+        request = chat_pb2.RegisterRequest(sender=username, address=f"{ip}:{port}")
         stub.RegisterConnection(request)
     
     while True: # infinite loop for now, check if ESC has been pressed in order to leave chat 
-        message = input(f"[{self.username}] ")
-        request = chat_pb2.SendMessageRequest(sender=sender.username, message=message)
+        message = input(f"[{username}] ")
+        request = chat_pb2.SendMessageRequest(sender=username, message=message)
         response = stub.SendMessage(request)
-        if not response.status == "success":
+        if response.status != "success":
             return # gracefully end chat 
     # at some point loop ends and we can terminate the connection
-    channel.close()
-    
+
 
 # option 2: subscribe to group chat
     # must provide an id
@@ -85,7 +90,27 @@ def connect_chat(self, sender, receiver):
         # open UI
         # listen for messages
 def subscribe_chat():
-    pass
+    opt = None
+    while opt != "0":
+        print("1. Subscribe to a group chat")
+        print("2. Connect to a group chat")
+        opt = input("Write an option: ")
+        match opt:
+            case "1": 
+                # connect chat
+                connect_chat(f'{username}:{address}')
+                pass
+            case "2":
+                # subscribe to group chat
+                subscribe_chat()
+            case "3":
+                # discover chats
+                discover_chats()
+                pass
+            case "4":
+                # access insult channel
+                access_insult_channel()
+                pass
 
 # option 3: discover chats
 def discover_chats():
@@ -112,56 +137,64 @@ if __name__ == "__main__":
         # if true retrieve another one
     #while existing_address(ip, port):
         # choose random client ip and port
-    selected = random.choice(config['clients'])
-    ip = selected['ip']
-    port = selected['port']
-    address = f'{ip}:{port}'
+    keys = redis_client.keys()
+    for i in range(len(config['clients'])):
+        selected = config['clients'][i]
+        ip = selected['ip']
+        port = selected['port']
+        address = f'{ip}:{port}'
 
-    keys = redis_client('*')
-    for key in keys:
-        if redis_client.get(key) == address:
-            selected = random.choice(config['clients'])
-            ip = selected['ip']
-            port = selected['port']
-            address = f'{ip}:{port}'
-        else:
+        unique = True
+        for key in keys:
+            print(key)
+            if redis_client.get(key) == address:
+                unique = False
+                break
+        if unique:
             break
-    print(ip, port)
+    
+    # all addresses already registered
+    if not unique:
+        exit()
 
     # add entry to name server
     redis_client.set(username, address)
 
     # create a gRPC server
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    
+
     # use the generated function 'add_ChatServiceServicer_to_server'
     # to add the defined class to the server
     chat_pb2_grpc.add_ChatServiceServicer_to_server(
-        ChatServicer(username=username), server)
+        ChatServicer(username=username, address=address), server)
     
     # lsiten on respective address and port
     server.add_insecure_port(address=address)
 
     server.start()
 
-    opt = 0
-    while opt != 0:
-        #draw_menu()
-        opt = input("hola")
+    opt = None
+    while opt != "0":
+        print("1. Connect chat")
+        print("2. Subscribe to group chat")
+        print("3. Discover chats")
+        print("4. Access insult channel")
+        opt = input("Write an option: ")
         match opt:
-            case 1: 
+            case "1": 
                 # connect chat
-                # ask for chat's id
-                #connect_chat()
+                connect_chat(f'{username}:{address}')
                 pass
-            case 2:
+            case "2":
                 # subscribe to group chat
-                pass
-            case 3:
+                subscribe_chat()
+            case "3":
                 # discover chats
+                discover_chats()
                 pass
-            case 4:
+            case "4":
                 # access insult channel
+                access_insult_channel()
                 pass
 
-    server.wait_for_termination()
+    server.stop(0)
